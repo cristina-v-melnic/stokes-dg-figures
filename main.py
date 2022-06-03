@@ -3,15 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-______________________________________________________________________________
+#______________________________________________________________________________
 # Path to the folder of the experiment
 # CHANGE HERE for every new refinement simulation results.
-______________________________________________________________________________
+#______________________________________________________________________________
 
 experiment_folder = '../Experiments/Refinement_Experiments_2022-01-18_12-17-59'
-______________________________________________________________________________
+#______________________________________________________________________________
 
-# Parameters used for plotting
+# Parameters used for plotting.
 # No need to change unless the plotting style is suboptimal.
 plt.rcParams.update({
     "pgf.texsystem": "pdflatex",
@@ -32,7 +32,7 @@ params = {'font.size': 21,
 
 plt.rcParams.update(params)
 
-_______________________________________________________________________________
+#_______________________________________________________________________________
 # The section with all important functions starts here.
 
 def check_directory(dir):
@@ -42,6 +42,8 @@ def check_directory(dir):
     else:
         pass
 
+# The following two functions access the data in the files with the
+# simulations results.
 
 def get_errors_from_files(outfiles_dir, outfiles, keys):
     '''
@@ -125,6 +127,8 @@ def get_h_from_files(outfiles_dir, outfiles):
         print("Warning: h can only be read from outfiles of H1 conforming elements")
         pass
 
+# The following function for plotting of convergence histories and is used
+# in the 2 important studies of convergence and pressure robustness comparison.
 
 def generate_plots(examples, velocity_spaces, outfiles, keys, save_in_dir="Results", conv_order=[]):
     '''
@@ -207,13 +211,17 @@ def generate_plots(examples, velocity_spaces, outfiles, keys, save_in_dir="Resul
 
 def get_res_from_folders(outfiles_dir="../Experiments/Optimal_sigma_2021-11-15_19-25-33/SinCos.h", nr_refinement=1):
     '''
-    Obtains the values of the DG parameter sigma and the residual of the iterative solver of the linear system of equations.
-    These are taken from the outfiles for a certain example in the Results folder of the current path, specified as parameters
+    Obtains the values of the DG parameter sigma and the residual
+    of the iterative solver of the linear system of equations.
+    These are taken from the outfiles for a certain example in 
+    the Results folder of the current path, specified as parameters
     of the function.
     
-    :param outfiles_dir: list (str) of all the outfiles in outfiles_dir(ectory)
+    :param outfiles_dir: list (str) of all the outfiles in 
+                         the outfiles_dir(ectory)
    
-    :return: a list of arrays - one with residual values and one with corresponding sigma values (array[double], array[double])
+    :return: a list of arrays - one with residual values and
+             one with corresponding sigma values (array[double], array[double])
     '''
     folders = sorted(os.listdir(outfiles_dir))
     res = []
@@ -240,8 +248,20 @@ def get_res_from_folders(outfiles_dir="../Experiments/Optimal_sigma_2021-11-15_1
 
     return np.array(res), np.array(sigma)
 
+# The following 2 functions can be ignored, as they were used in the study of 
+# results on sigma dependency, which was later studies with a table instead of plots.
 
 def plot_sigma_res_refinement():
+    '''
+    Obtains the values of the DG parameter sigma and the residual of the 
+    iterative solver of the linear system of equations. These are taken 
+    from the outfiles for a certain example in the Results folder of 
+    the current path, specified as parameters of the function.
+    
+    :param outfiles_dir: list (str) of all the outfiles in outfiles_dir(ectory)
+   
+    :return: plot of the  (array[double], array[double])
+    '''
     res_1 = get_res_from_folders(
         "../Experiments/Optimal_sigma_2021-11-15_19-25-33/SinCos.h", nr_refinement=1)
     res_2 = get_res_from_folders(
@@ -260,6 +280,10 @@ def plot_sigma_res_refinement():
 
 
 def plot_sigma_res_refinement_BDM1():
+    '''
+    A clone of the 'plot_sigma_res_refinement()' function with different
+    paths to access the data. See description above.
+    '''
     res_1 = get_res_from_folders(
         "../Experiments/Optimal_sigma_BDM1_ref1_it_2021-11-19_13-10-00/SinCos.h", nr_refinement=1)
     res_2 = get_res_from_folders(
@@ -278,65 +302,30 @@ def plot_sigma_res_refinement_BDM1():
     plt.savefig("sincos_BDM1_res.png")
     plt.show()
 
-
-def plot_sigma_res_refinement_BDM1_it():
-    res_1 = get_res_from_folders(
-        "../Experiments/Optimal_sigma_BDM1_ref1_it_2021-11-16_11-05-04/SinCos.h", nr_refinement=1)
-    res_2 = get_res_from_folders(
-        "../Experiments/Optimal_sigma_BDM1_ref2_it_2021-11-16_11-04-43/SinCos.h", nr_refinement=2)
-    res_3 = get_res_from_folders(
-        "../Experiments/Optimal_sigma_BDM1_ref3_it_2021-11-16_10-57-09/SinCos.h", nr_refinement=3)
-
-    plt.scatter(np.log(res_1[1]), np.log(res_1[0]), label="n_ref = 1")
-    plt.scatter(np.log(res_2[1]), np.log(res_2[0]), label="n_ref = 2")
-    plt.scatter(np.log(res_3[1]), np.log(res_3[0]), label="n_ref = 3")
-
-    plt.xlabel("log(sigma)")
-    plt.ylabel("log(res)")
-    plt.legend()
-    plt.savefig("sincos_BDM1_it10.png")
-    plt.show()
-
-
-def get_sigma_cond_nr(path="../../software/matlab_program/bin/files/search_1/matlab_results"):
-    '''
-    Attention! Edit the directory with results from MATLAB before calling.
-
-
-    '''
-    sigma = []
-    c1 = []
-    c2 = []
-    c3 = []
-    with open(path, 'r') as f:
-        text = f.readlines()
-        for line in text:
-            if not("sigma" in line):
-                terms = line.split()
-                sigma.append(float(terms[0]))
-                c1.append(float(terms[1]))
-                c2.append(float(terms[2]))
-                c3.append(float(terms[3]))
-    print(sigma)
-    print(c1)
-    print(c2)
-    print(c3)
-
-    plt.scatter(np.log(sigma), np.log(c1), label="n_ref = 1")
-    plt.scatter(np.log(sigma), np.log(c2), label="n_ref = 2")
-    plt.scatter(np.log(sigma), np.log(c3), label="n_ref = 3")
-
-    plt.xlabel("log(sigma)")
-    plt.ylabel("log(cond_nr)")
-    plt.legend()
-    plt.savefig("sincos_BDM1_cond.png")
-    plt.show()
-
+#____________________________________________________________
+# The MAIN functions that use the functions constructed above.
+# The functions that give that give the results of the important studies are below. 
+# 
+#These are, namely:
+# (i) The comparison of convergence histories with velocity spaces of similar convergence
+#     order. Question: Which ones are optimal - the dg or non-dg methods? 
+#
+# (ii)*[-optional] Which sigma to choose in the dg simulation for optimal results?, 
+#                  i.e., where errors and condition number are smallest.
+#
+# (iii) Are the dg methods ineed pressure robust and can one see the difference
+#       to the classical H1-conforming methods? (spoiler alert -> yes and quite a lot!)
 
 def get_conv_history():
     '''
     Attention! Edit the global directory before calling.
-
+    
+    Generates convergence history plots for 2 examples, of multiple
+    velocity spaces per graph for comparison of performance. 
+    
+   
+    :return: Directory containing different directories for each 
+             set of velocity spaces per graph. 
 
     '''
     # A list of all example names in the experiment_folder.
@@ -381,8 +370,15 @@ def get_conv_history():
 def get_table(outfiles_dir='../Experiments/Optimal_sigma_ref3_2022-01-26_09-31-03/polynomial_solution.h'):
     '''
     Attention! Edit the directory before calling.
-
-
+    
+    Generates text files in a table format containing
+    values for the 'keys' parameters for computations
+    of different sigmas (list) to observe which value
+    would be optimal. 
+    
+    For the full table given in the thesis, an additional
+    column with the condition number must be computed 
+    separately using the '.mat' file.
     '''
     out_folders = sorted(os.listdir(outfiles_dir))
     keys = ["symmetry_DG:", "face_sigma_DG:", "L2(u)", "L2(div(u))", "H1-semi(u)", "L2(p)", "H1-semi(p)"]
@@ -483,7 +479,21 @@ def get_table(outfiles_dir='../Experiments/Optimal_sigma_ref3_2022-01-26_09-31-0
         the_file.writelines("\n" + line)
 
 
-def get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-23_09-33-58/SinCos.h',  keys=["L2(div(u))"], save_in_dir="Pressure_Robustness", nr_ref=4):
+def get_robustness_exp(dir_name = '../Experiments/Reynolds_nr_Scaling_2021-11-23_09-33-58/SinCos.h', keys = ["L2(div(u))"], save_in_dir = "Pressure_Robustness", nr_ref = 4):
+    '''
+    Gets the data for the robustness experiments for the specified
+    example in the directory path and returns plots of convergence
+    histories for different values of Re.
+    
+    :param dir_name: (str) 
+        The directory with the pressure robustness results for the specific example.
+    :param keys: list of (str) 
+    :param save_in_dir: (str)
+    :param nr_ref: (int) number of different Re values.
+     
+   
+    :return: Directory with graphs for every velocity space.
+    '''
     folders = sorted(os.listdir(dir_name))
     print(folders)
 
@@ -559,16 +569,24 @@ def get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-23_0
 
 
 if __name__ == '__main__':
-    # print(get_res_from_folders("../Experiments/Optimal_sigma_2021-11-15_19-25-33/SinCos.h", nr_refinement = 1))
-    # print(get_res_from_folders("../Experiments/Optimal_sigma_2021-11-15_19-53-12/SinCos.h", nr_refinement = 2))
+    # Important: Before running, ensure to clone the stokes-dg-experiment
+    # repository and and adjust the names of the directories in the global
+    # variables here as well as locally in the functions that are to be run.	
 
-    # commented Nov 22
-    # plot_sigma_res_refinement_BDM1()
-    # get_sigma_cond_nr()
+    # To obtain convergence history plots for both examples
+    # and all (specified above) velocity spaces, uncomment below. 
+    get_conv_history()
+    
+    # To get the plots of pressure robustness results for both
+    # examples and velocity spaces, uncomment both lines below
+    # (one for each example, the latter is specified in the path).
+    get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-29_19-28-37/SinCos.h', save_in_dir="Pressure_Robustness_sin", nr_ref = 7)
+    get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-29_19-28-37/polynomial_solution.h', save_in_dir="Pressure_Robustness_pol", nr_ref = 7)
 
-    #get_conv_history()
-    #get_table(outfiles_dir='../Experiments/Optimal_sigma_ref1_2021-12-08_06-26-47/polynomial_solution.h')
+    # To obtain the tables needed for the analysis of the optimal sigma
+    # choice for the dg simulation, uncomment below.
+    # If the condition number is also needed, go to the ".mat" file.
+    get_table(outfiles_dir='../Experiments/Optimal_sigma_ref1_2021-12-08_06-26-47/polynomial_solution.h')
     get_table()
 
-    #get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-29_19-28-37/SinCos.h', save_in_dir="Pressure_Robustness_sin", nr_ref = 7)
-    #get_robustness_exp(dir_name='../Experiments/Reynolds_nr_Scaling_2021-11-29_19-28-37/polynomial_solution.h', save_in_dir="Pressure_Robustness_pol", nr_ref = 7)
+    

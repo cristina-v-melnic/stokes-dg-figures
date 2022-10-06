@@ -13,7 +13,7 @@ the error for every element refinement size, i.e., the convergence history. This
 velocity spaces per graph for comparison of performance between numerical schemes. 
 - *get_robustness_exp()* - Gets the data for the robustness experiments for the specified example in the directory path
 and returns plots of convergence histories for different values of  $Re$ (Reynolds number).
-- *get_table()* - Generates text files in a latex table format containing values for the 'keys' parameters for computations
+- *get_table()* - Generates text files in a table format containing values for the 'keys' parameters for computations
 of different sigmas (parameter of the Stokes DG discretisation) to determine which value would be optimal.
 
 

@@ -27,7 +27,7 @@ of different sigmas (parameter of the Stokes DG discretisation) to determine whi
 ![image](https://user-images.githubusercontent.com/103945852/194315365-ba46b034-5080-4ec8-93bd-16cf56d58d6a.png)
 
 #### Parameter grid-search
-![image](https://user-images.githubusercontent.com/103945852/194315720-4e28b277-d2fe-4308-9315-3acf5a1bdb86.png)
+![image](https://user-images.githubusercontent.com/103945852/194316447-7ef21585-4f42-48dc-8ae1-f4e7128f67b5.png)
 
 The figures above are from the contents the 
 [master thesis](https://github.com/cristina-v-melnic/stokes-dg-experiments/blob/main/Master_Thesis_signed.pdf), where full description

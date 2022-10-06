@@ -2,7 +2,7 @@
 Visualisation of simulation data obtained with the ParMooN finite element package in the 
 [stokes-dg-experiments project](https://github.com/cristina-v-melnic/stokes-dg-experiments).
 
-# Functionality
+## Functionality
 - *get_cond_nr.m* -  Computes the system matrix condition number of the linear system of equations corresponding to the Stokes finite-element problem.
 - *main.py* - Generates plots for numerical analyses and saves them in specified directories.
 
@@ -17,7 +17,7 @@ and returns plots of convergence histories for different values of  $Re$ (Reynol
 of different sigmas (parameter of the Stokes DG discretisation) to determine which value would be optimal.
 
 
-##### Credits
+## Credits
 This work was part of my master's thesis project with Prof. Dr. Volker John, Derk Frerichs and Dr. Ulrich Wilbrandt from the
 "Numerical Mathematics and Scientific Computing" group at the Weierstrass Institute Berlin. It was financially supported by
 the DAAD funding of my master's studies, and the "WIAS Female Master Students Program" funding of my research assistanship.
